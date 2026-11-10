@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block extra_head %}
+{% include "includes/content_head.html" %}
+{% endblock %}
+
+{% block chrome %}
+<div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+{% endblock %}
+
+{% block content %}
+<article class="note-detail">
+  <header class="note-detail-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="{% url 'blog:home' %}">首页</a><span>/</span>
+        <a href="{% url 'blog:note_list' %}">知识库</a><span>/</span>
+        <span>{{ note.title }}</span>
+      </nav>
+      <div class="note-detail-grid">
+        <div>
+          <div class="note-detail-kicker">
+            <span class="note-type"><span class="note-type-mark"></span>{{ note.get_note_type_display }}</span>
+            {% if note.is_pinned %}<span class="pin-mark">PINNED</span>{% endif %}
+            <span class="note-updated">UPDATED {{ note.updated_at|date:"Y.m.d" }}</span>
+          </div>
+          <h1>{{ note.title }}</h1>
+          <p class="page-lead">{{ note.summary }}</p>
+          <div class="note-detail-tags">
+            {% for tag in note.tags.all %}<a href="{{ tag.get_absolute_url }}">#{{ tag.name }}</a>{% endfor %}
+          </div>
+        </div>
+        <div class="note-stamp" aria-hidden="true">
+          <span class="note-stamp-type">{{ note.note_type|upper }}</span>
+          <strong>{{ note.updated_at|date:"Y" }}</strong>
+          <span>{{ note.updated_at|date:"m.d" }}</span>
+          <i>ZETTEL</i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container note-layout">
+    <div class="note-main">
+      <div class="prose prose--note">
+        {{ rendered.html|safe }}
+      </div>
+
+      <footer class="note-footer">
+        <div class="note-footer-top">
+          <span class="article-end-label">CARD INFO</span>
+          <button class="copy-link" type="button" data-copy-link>
+            <svg class="icon" aria-hidden="true"><use href="#icon-link"></use></svg><span>复制链接</span>
+          </button>
+        </div>
+        <dl class="note-facts">
+          <div><dt>类型</dt><dd>{{ note.get_note_type_display }}</dd></div>
+          <div><dt>创建</dt><dd>{{ note.created_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>更新</dt><dd>{{ note.updated_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>别名</dt><dd>{% if note.alias_list %}{{ note.alias_list|safe_join:" / " }}{% else %}—{% endif %}</dd></div>
+        </dl>
+      </footer>
+
+      <section class="link-section">
+        <div class="section-head section-head--small">
+          <div class="section-head-copy">
+            <p class="eyebrow">LINKED FROM</p>
+            <h2>反向链接 <span class="heading-count">{{ backlinks|length }}</span></h2>
+          </div>
+          <span class="section-note">哪些卡片提到了这里</span>
+        </div>
+        {% if backlinks %}
+          <div class="backlink-list">
+            {% for backlink in backlinks %}
+              <a class="backlink" href="{{ backlink.get_absolute_url }}">
+                <span class="backlink-type">{{ backlink.type_label }}</span>
+                <strong>{{ backlink.title }}</strong>
+                <span>{{ backlink.summary }}</span>
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="link-empty">
+            <span>∅</span>
+            <p>还没有其他卡片链接到这里。它是这条思路的起点。</p>
+          </div>
+        {% endif %}
+      </section>
+
+      {% if outgoing_links %}
+        <section class="link-section">
+          <div class="section-head section-head--small">
+            <div class="section-head-copy">
+              <p class="eyebrow">REFERENCES</p>
+              <h2>这张卡片指向 <span class="heading-count">{{ outgoing_links|length }}</span></h2>
+            </div>
+          </div>
+          <div class="outgoing-grid">
+            {% for target in outgoing_links %}
+              <a class="outgoing-card" href="{{ target.get_absolute_url }}">
+                <span>{{ target.type_label }}</span>
+                <strong>{{ target.title }}</strong>
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+
+      <div class="note-back">
+        <a href="{% url 'blog:note_list' %}"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>返回知识库</a>
+        <a href="mailto:{{ site.email }}?subject=关于卡片《{{ note.title }}》">指出问题 <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <aside class="article-aside">
+      {% include "partials/toc.html" with toc=toc %}
+
+      <div class="aside-block">
+        <p class="aside-label">CARD</p>
+        <dl class="aside-meta-list">
+          <div><dt>类型</dt><dd>{{ note.get_note_type_display }}</dd></div>
+          <div><dt>更新</dt><dd>{{ note.updated_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>出链</dt><dd>{{ outgoing_links|length }}</dd></div>
+          <div><dt>入链</dt><dd>{{ backlinks|length }}</dd></div>
+        </dl>
+      </div>
+
+      <div class="aside-block note-graph-help">
+        <p class="aside-label">DOUBLE LINK</p>
+        <p>在正文里用 <code>[[标题]]</code> 引用另一张卡片，保存后即可在这里看到双向连接。</p>
+        <a class="text-link" href="{% url 'blog:note_list' %}">浏览全部卡片 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <button class="aside-top" type="button" data-back-to-top>
+        <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up"></use></svg>回到顶部
+      </button>
+    </aside>
+  </div>
+</article>
+{% endblock %}
+
+{% block scripts %}
+{% include "includes/content_scripts.html" %}
+{% endblock %}

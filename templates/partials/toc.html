@@ -1,0 +1,20 @@
+{% if toc %}
+<nav class="toc" aria-label="文章目录" data-toc>
+  <div class="toc-head">
+    <span>ON THIS PAGE</span>
+    <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="true" aria-label="折叠目录">
+      <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+    </button>
+  </div>
+  <ol class="toc-list">
+    {% for item in toc %}
+      <li class="toc-item toc-level-{{ item.level }}" style="--depth: {{ item.level }}">
+        <a href="#{{ item.id }}" data-toc-link>
+          <span class="toc-index">{% if item.level == 2 %}—{% else %}·{% endif %}</span>
+          <span>{{ item.name }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}

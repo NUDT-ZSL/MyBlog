@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="page-hero page-hero--notes">
+  <div class="container">
+    <div class="page-hero-top">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>SECOND BRAIN / ZETTELKASTEN</p>
+      <span class="page-count">{{ total_notes }} <small>cards</small></span>
+    </div>
+    <div class="page-hero-grid">
+      <div>
+        <h1 class="page-title">卡片会自己<span class="title-accent">长出</span>文章</h1>
+        <p class="page-lead">这里不是正式文章的仓库，而是思考发生的地方：术语、命令、报错，以及尚未想清楚的问题。它们通过 <code>[[双链]]</code> 互相连接。</p>
+      </div>
+      <aside class="page-hero-aside">
+        <p class="aside-label">NOTE TO SELF</p>
+        <p>写下来，<br>连接起来，<br>然后等待它长大。</p>
+      </aside>
+    </div>
+
+    <div class="note-stats">
+      <div><strong>{{ type_counts.concept|default:0 }}</strong><span>概念卡片</span></div>
+      <div><strong>{{ type_counts.cheatsheet|default:0 }}</strong><span>速查手册</span></div>
+      <div><strong>{{ type_counts.log|default:0 }}</strong><span>碎片记录</span></div>
+      <div><strong>{{ total_notes }}</strong><span>全部卡片</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="container notes-layout">
+  <div class="notes-main">
+    <div class="notes-toolbar">
+      <div class="filter-chips">
+        <a class="filter-chip {% if not note_type and not selected_tag %}is-active{% endif %}" href="{% url 'blog:note_list' %}">全部 <span>{{ total_notes }}</span></a>
+        <a class="filter-chip {% if note_type == 'concept' %}is-active{% endif %}" href="?type=concept">概念 <span>{{ type_counts.concept|default:0 }}</span></a>
+        <a class="filter-chip {% if note_type == 'cheatsheet' %}is-active{% endif %}" href="?type=cheatsheet">速查 <span>{{ type_counts.cheatsheet|default:0 }}</span></a>
+        <a class="filter-chip {% if note_type == 'log' %}is-active{% endif %}" href="?type=log">碎片 <span>{{ type_counts.log|default:0 }}</span></a>
+      </div>
+      <form class="inline-search" action="{% url 'blog:note_list' %}" method="get" role="search">
+        <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+        <input type="search" name="q" value="{{ query }}" placeholder="筛卡片…" aria-label="筛选知识卡片">
+      </form>
+    </div>
+
+    {% if selected_tag or query %}
+      <div class="result-bar">
+        <p>{% if selected_tag %}标签：#{{ selected_tag.name }}{% endif %}{% if query %} 关键词：“{{ query }}”{% endif %}</p>
+        <a href="{% url 'blog:note_list' %}">清除筛选 <span aria-hidden="true">×</span></a>
+      </div>
+    {% endif %}
+
+    <div class="note-grid">
+      {% for note in notes %}
+        {% include "partials/note_card.html" with note=note %}
+      {% empty %}
+        <div class="empty-state empty-state--large">
+          <span class="empty-mark">∅</span>
+          <h2>没有找到卡片</h2>
+          <p>换个关键词，或者从概念卡片开始。</p>
+          <a class="button button-ghost" href="{% url 'blog:note_list' %}">回到知识库</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="notes-footnote">
+      <span class="footnote-mark">※</span>
+      <p>知识库与文章分开维护：文章是打磨后的输出，卡片是仍在生长的思考。卡片中的双链用 <code>[[标题]]</code> 语法书写，详情页底部会自动显示反向链接。</p>
+    </div>
+  </div>
+
+  <aside class="notes-aside">
+    <div class="side-card network-card">
+      <div class="side-head"><h2>笔记网络</h2><span class="side-count">GRAPH</span></div>
+      <svg class="mini-graph" viewBox="0 0 320 220" role="img" aria-label="知识卡片连接示意图">
+        <g class="graph-lines">
+          <path d="M160 110 82 54M160 110l86-54M160 110 58 164M160 110l94 62M82 54 58 164M246 56l-3 116M82 54l164 2"/>
+        </g>
+        <g class="graph-nodes">
+          <circle cx="160" cy="110" r="27" class="graph-root"/>
+          <circle cx="82" cy="54" r="17"/>
+          <circle cx="246" cy="56" r="13"/>
+          <circle cx="58" cy="164" r="19"/>
+          <circle cx="254" cy="172" r="15"/>
+        </g>
+        <g class="graph-labels">
+          <text x="160" y="114" text-anchor="middle">SSA</text>
+          <text x="82" y="58" text-anchor="middle">DOM</text>
+          <text x="246" y="60" text-anchor="middle">IR</text>
+          <text x="58" y="168" text-anchor="middle">DFA</text>
+          <text x="254" y="176" text-anchor="middle">FIX</text>
+        </g>
+      </svg>
+      <p class="network-caption">一个概念只有被别的概念引用时，才真正进入网络。</p>
+    </div>
+
+    <div class="side-card">
+      <div class="side-head"><h2>标签</h2><span class="side-count">TAGS</span></div>
+      <div class="tag-cloud">
+        {% for tag in note_tags %}
+          <a class="tag-cloud-item accent-{{ tag.accent }}" style="--weight: {{ tag.note_count }}" href="?tag={{ tag.slug }}">#{{ tag.name }}<span>{{ tag.note_count }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="side-card note-method">
+      <div class="side-head"><h2>怎么用</h2></div>
+      <ol>
+        <li><span>01</span>先记下，不追求完整。</li>
+        <li><span>02</span>给卡片起一个可被引用的名字。</li>
+        <li><span>03</span>用双链把它接到已有概念上。</li>
+        <li><span>04</span>当一张卡片被反复引用，就把它写成文章。</li>
+      </ol>
+    </div>
+
+    <a class="aside-back" href="{% url 'blog:post_list' %}">
+      去看打磨后的文章
+      <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+    </a>
+  </aside>
+</div>
+{% endblock %}

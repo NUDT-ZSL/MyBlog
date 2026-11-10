@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="IR 之下博客引擎封面">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#9bb3c4" stroke-opacity="0.07"/>
+    </pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1620"/><stop offset="1" stop-color="#071015"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#61d7bd"/><stop offset="1" stop-color="#7fa9ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <text x="40" y="52" font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#61d7bd" letter-spacing="3">SELF HOSTED / 08</text>
+  <text x="40" y="82" font-family="Cascadia Code, Consolas, monospace" font-size="9" fill="#637586" letter-spacing="2">DJANGO · SQLITE · HANDWRITTEN CSS</text>
+  <rect x="94" y="112" width="612" height="254" rx="9" fill="#070d12" stroke="#9bb3c4" stroke-opacity="0.25"/>
+  <rect x="94" y="112" width="612" height="31" rx="9" fill="#0d161e"/>
+  <g fill="#9bb3c4" fill-opacity="0.25">
+    <circle cx="113" cy="127" r="4"/><circle cx="128" cy="127" r="4"/><circle cx="143" cy="127" r="4"/>
+  </g>
+  <text x="165" y="131" font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586">lin@ir: ~/myblogs</text>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="11">
+    <text x="118" y="175" fill="#61d7bd">$</text><text x="136" y="175" fill="#c9d6e1">python manage.py runserver</text>
+    <text x="118" y="199" fill="#637586">Watching for file changes with StatReloader</text>
+    <text x="118" y="223" fill="#637586">Performing system checks...</text>
+    <text x="118" y="247" fill="#8fa3b4">System check identified no issues (0 silenced).</text>
+    <text x="118" y="275" fill="#61d7bd">$</text><text x="136" y="275" fill="#c9d6e1">curl -s localhost:8000 | head</text>
+    <text x="118" y="299" fill="#8fa3b4">&lt;title&gt;IR 之下 · 代码、逻辑与细碎日常&lt;/title&gt;</text>
+    <text x="118" y="327" fill="#61d7bd">$</text><text x="136" y="327" fill="#c9d6e1">git push origin main</text>
+    <text x="530" y="327" fill="#e7b76b">✓ deployed</text>
+  </g>
+  <g transform="translate(600 64)">
+    <rect x="0" y="0" width="156" height="42" rx="5" fill="#0f1d25" stroke="#61d7bd" stroke-opacity="0.3"/>
+    <text x="78" y="17" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="7" fill="#637586">BUILD</text>
+    <text x="78" y="32" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="10" fill="#61d7bd">0.38s · 0 errors</text>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586">
+    <text x="40" y="405">Django 6 · Markdown · Pygments</text>
+    <text x="40" y="422" fill="#7fa9ff" fill-opacity="0.75">search · RSS · Giscus · dark mode</text>
+  </g>
+</svg>

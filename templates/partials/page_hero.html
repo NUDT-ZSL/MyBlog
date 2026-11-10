@@ -1,0 +1,15 @@
+{% load static %}
+<section class="page-hero page-hero--compact">
+  <div class="container page-hero-inner">
+    <div class="page-hero-copy">
+      {% if eyebrow %}<p class="eyebrow"><span class="eyebrow-dot"></span>{{ eyebrow }}</p>{% endif %}
+      {% if not not_title %}<h1>{{ page_title }}</h1>{% endif %}
+      {% if page_description %}<p class="page-hero-desc">{{ page_description }}</p>{% endif %}
+      {% block page_hero_extra %}{% endblock %}
+    </div>
+    <div class="page-hero-meta">
+      {% if meta_label %}<span class="meta-label">{{ meta_label }}</span>{% endif %}
+      {% if meta_value %}<span class="meta-value">{{ meta_value }}</span>{% endif %}
+    </div>
+  </div>
+</section>

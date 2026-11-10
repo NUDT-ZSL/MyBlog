@@ -1,0 +1,16 @@
+{% load blog_extras %}
+<article class="note-card note-type-{{ note.note_type }}">
+  <a href="{{ note.get_absolute_url }}" class="note-card-link">
+    <div class="note-card-top">
+      <span class="note-type"><span class="note-type-mark"></span>{{ note.get_note_type_display }}</span>
+      {% if note.is_pinned %}<span class="pin-mark" title="置顶">PIN</span>{% endif %}
+      <time datetime="{{ note.updated_at|date:'c' }}">{{ note.updated_at|date:"m.d" }}</time>
+    </div>
+    <h3>{{ note.title }}</h3>
+    <p>{{ note.summary }}</p>
+    <div class="note-card-foot">
+      <div class="note-tags">{% for tag in note.tags.all|slice:":3" %}<span>#{{ tag.name }}</span>{% endfor %}</div>
+      <span class="note-link-icon"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></span>
+    </div>
+  </a>
+</article>

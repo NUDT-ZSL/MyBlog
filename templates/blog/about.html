@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="container about-hero-grid">
+    <div class="about-hero-copy">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>ABOUT / {{ site.location|upper }}</p>
+      <h1>你好，我是<br><span>{{ site.owner }}</span><i>.</i></h1>
+      <p class="about-role">{{ site.role }} · {{ site.lab }}</p>
+      <p class="page-lead">{{ site.description }}</p>
+      <div class="about-actions">
+        <a class="button button-primary" href="mailto:{{ site.email }}">写信给我 <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg></a>
+        <a class="button button-ghost" href="{% url 'blog:resume' %}">在线简历 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+      </div>
+      <div class="about-links">
+        <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <a href="{{ site.gitee }}" target="_blank" rel="noopener noreferrer">Gitee <span aria-hidden="true">↗</span></a>
+        <a href="{{ site.scholar }}" target="_blank" rel="noopener noreferrer">Scholar <span aria-hidden="true">↗</span></a>
+        <a href="{% url 'blog:rss_feed' %}">RSS <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="about-portrait">
+      <div class="portrait-frame">
+        <img src="{% static site.avatar %}" alt="{{ site.owner }} 的头像" width="480" height="480">
+        <span class="portrait-caption">FIG. 01 / A HUMAN WHO READS IR</span>
+      </div>
+      <div class="portrait-notes">
+        <div><span>LOCATION</span><strong>{{ site.location }}</strong></div>
+        <div><span>FOCUS</span><strong>Trusted Software</strong></div>
+        <div><span>STATUS</span><strong class="is-online"><span class="pulse-dot"></span>Writing code</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="about-stats">
+  <div class="container about-stats-inner">
+    <div><strong>{{ counts.posts }}</strong><span>篇文章</span></div>
+    <div><strong>{{ counts.notes }}</strong><span>张卡片</span></div>
+    <div><strong>{{ counts.projects }}</strong><span>个项目</span></div>
+    <div><strong>{{ counts.views }}</strong><span>次阅读</span></div>
+    <p>数字会变化，问题不会。</p>
+  </div>
+</div>
+
+<div class="container about-layout">
+  <div class="about-main">
+    <section class="about-section" id="research">
+      <div class="about-section-head">
+        <span class="section-index">01</span>
+        <div><p class="eyebrow">RESEARCH</p><h2>我在研究什么</h2></div>
+      </div>
+      <p class="about-lead">一句话：让程序的行为更早、更确定地被看见。</p>
+      <p>博士一年级，方向是高可信软件与程序分析。具体来说，我在学习如何把 LLVM IR 变成可分析、可验证的中间对象：构建数据流分析、理解支配关系、在优化与正确性之间寻找可以证明的边界。也对 AI 与程序分析的交叉感兴趣——不是让模型“猜”代码，而是让它帮助我们提出更好的不变量与测试。</p>
+      <div class="interest-list">
+        {% for interest in research_interests %}
+          <div class="interest-item"><span>0{{ forloop.counter }}</span><p>{{ interest }}</p></div>
+        {% endfor %}
+      </div>
+      <div class="about-note">
+        <span class="about-note-mark">⌁</span>
+        <p>{{ site.status }}</p>
+      </div>
+    </section>
+
+    <section class="about-section" id="stack">
+      <div class="about-section-head">
+        <span class="section-index">02</span>
+        <div><p class="eyebrow">TOOLKIT</p><h2>技术栈</h2></div>
+      </div>
+      <div class="stack-grid">
+        {% for group in stack_groups %}
+          <div class="stack-card">
+            <div class="stack-card-head">
+              <span class="stack-icon"><svg class="icon" aria-hidden="true"><use href="#icon-{{ group.icon }}"></use></svg></span>
+              <h3>{{ group.title }}</h3>
+            </div>
+            <ul>
+              {% for item in group.items %}<li>{{ item }}</li>{% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="about-section" id="plan">
+      <div class="about-section-head">
+        <span class="section-index">03</span>
+        <div><p class="eyebrow">ROADMAP</p><h2>当前计划</h2></div>
+      </div>
+      <div class="timeline">
+        {% for item in current_plan %}
+          <div class="timeline-item {% if item.done %}is-done{% endif %}">
+            <span class="timeline-dot"></span>
+            <span class="timeline-period">{{ item.period }}</span>
+            <div class="timeline-body">
+              <h3>{{ item.title }}{% if item.done %}<span class="done-mark">DONE</span>{% endif %}</h3>
+              <p>{{ item.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <p class="about-small-note">求职方向：关注编译器 / 程序分析相关研发岗与央国企机会，避开军工方向。具体简历见 <a href="{% url 'blog:resume' %}">这里</a>。</p>
+    </section>
+
+    <section class="about-section" id="life">
+      <div class="about-section-head">
+        <span class="section-index">04</span>
+        <div><p class="eyebrow">OFF THE CLOCK</p><h2>代码之外</h2></div>
+      </div>
+      <div class="hobby-grid">
+        {% for hobby in hobbies %}
+          <div class="hobby-card">
+            <span class="hobby-icon"><svg class="icon" aria-hidden="true"><use href="#icon-{{ hobby.icon }}"></use></svg></span>
+            <h3>{{ hobby.title }}</h3>
+            <p>{{ hobby.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="about-section" id="site">
+      <div class="about-section-head">
+        <span class="section-index">05</span>
+        <div><p class="eyebrow">COLOPHON</p><h2>关于本站</h2></div>
+      </div>
+      <div class="colophon">
+        <dl>
+          <div><dt>技术栈</dt><dd>{{ site_notes.stack }}</dd></div>
+          <div><dt>部署</dt><dd>{{ site_notes.hosting }}</dd></div>
+          <div><dt>内容声明</dt><dd>{{ site_notes.disclaimer }}</dd></div>
+          <div><dt>版权</dt><dd>{{ site_notes.copyright }}</dd></div>
+        </dl>
+        <div class="colophon-links">
+          <a href="{{ site.site_repo }}" target="_blank" rel="noopener noreferrer">站点源码 <span aria-hidden="true">↗</span></a>
+          <a href="{% url 'blog:rss_feed' %}">RSS 订阅 <span aria-hidden="true">↗</span></a>
+          <a href="{% url 'blog:friends' %}">友链 <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="about-aside">
+    <div class="side-card about-contact-card">
+      <p class="aside-label">CONTACT</p>
+      <p class="about-contact-title">讨论一个<br>具体的问题。</p>
+      <a class="about-mail" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <p>{{ site.email_note }}。欢迎论文讨论、工程问题与站点勘误。</p>
+      <div class="contact-socials">
+        {% for social in socials %}
+          <a href="{{ social.url }}" {% if social.url|slice:':4' == 'http' %}target="_blank" rel="noopener noreferrer"{% endif %} aria-label="{{ social.label }}"><svg class="icon" aria-hidden="true"><use href="#icon-{{ social.icon }}"></use></svg></a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="side-card about-nav-card">
+      <p class="aside-label">ON THIS PAGE</p>
+      <a href="#research">01 / 研究</a>
+      <a href="#stack">02 / 技术栈</a>
+      <a href="#plan">03 / 计划</a>
+      <a href="#life">04 / 生活</a>
+      <a href="#site">05 / 本站</a>
+    </div>
+
+    <div class="side-card about-more">
+      <p class="aside-label">MORE</p>
+      <a href="{% url 'blog:books' %}">书单 <span aria-hidden="true">→</span></a>
+      <a href="{% url 'blog:tools' %}">工具箱 <span aria-hidden="true">→</span></a>
+      <a href="{% url 'blog:resume' %}">简历 <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+</div>
+
+<section class="about-closing">
+  <div class="container">
+    <p class="about-closing-index">EOF / 2026</p>
+    <p class="about-closing-quote">保持好奇，保持怀疑，<br>然后写下证据。</p>
+    <a href="mailto:{{ site.email }}" class="button button-primary">开始一段对话 <svg class="icon" aria-hidden="true"><use href="#icon-send"></use></svg></a>
+  </div>
+</section>
+{% endblock %}

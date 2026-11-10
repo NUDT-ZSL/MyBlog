@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="page-hero page-hero--archive">
+  <div class="container">
+    <div class="page-hero-top">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>ARCHIVE / ALL WRITING</p>
+      <span class="page-count">{{ total_posts }} <small>entries</small></span>
+    </div>
+    <div class="page-hero-grid">
+      <div>
+        <h1 class="page-title">时间<span class="title-accent">折叠</span>之后</h1>
+        <p class="page-lead">按时间顺序排列的全部文章。没有热度，没有推荐，只有写过的东西和它们发生的时刻。</p>
+      </div>
+      <aside class="page-hero-aside">
+        <p class="aside-label">SPAN</p>
+        <p>{% if groups %}{% with oldest=groups|last %}{{ oldest.year }}{% endwith %} — {{ groups.0.year }}{% else %}尚未开始{% endif %}</p>
+        <span class="archive-aside-note">{{ groups|length }} 个年份 · {{ categories|length }} 个分类</span>
+      </aside>
+    </div>
+    <div class="archive-stats">
+      <div><strong>{{ total_posts }}</strong><span>全部文章</span></div>
+      <div><strong>{{ groups|length }}</strong><span>年份</span></div>
+      <div><strong>{{ categories|length }}</strong><span>分类</span></div>
+      <div><strong>{{ tags|length }}</strong><span>标签</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="container archive-layout">
+  <div class="archive-main">
+    {% for group in groups %}
+      <section class="archive-year">
+        <header class="archive-year-head">
+          <h2>{{ group.year }}</h2>
+          <span>{{ group.count }} entries</span>
+          <i aria-hidden="true"></i>
+        </header>
+        {% for month in group.months %}
+          <div class="archive-month">
+            <div class="archive-month-label"><span>{{ month.label }}</span><i></i></div>
+            <div class="archive-items">
+              {% for post in month.posts %}
+                <a class="archive-item accent-{{ post.accent }}" href="{{ post.get_absolute_url }}">
+                  <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"m.d" }}</time>
+                  <span class="archive-item-main">
+                    <strong>{{ post.title }}</strong>
+                    <span class="archive-item-meta">{{ post.category.icon }} {{ post.category.name }} · {{ post.reading_minutes }} min</span>
+                  </span>
+                  <span class="archive-item-arrow"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></span>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    {% empty %}
+      <div class="empty-state empty-state--large">
+        <span class="empty-mark">∅</span>
+        <h2>时间线还是空的</h2>
+        <p>等第一篇文章发布之后，这里会开始生长。</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <aside class="archive-aside">
+    <div class="side-card">
+      <div class="side-head"><h2>分类</h2><span class="side-count">INDEX</span></div>
+      <ul class="archive-cat-list">
+        {% for category in categories %}
+          <li><a href="{{ category.get_absolute_url }}"><span>{{ category.icon }} {{ category.name }}</span><span>{{ category.post_count }}</span></a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="side-card" id="tags">
+      <div class="side-head"><h2>标签</h2><span class="side-count">ALL</span></div>
+      <div class="tag-cloud">
+        {% for tag in tags %}
+          <a class="tag-cloud-item accent-{{ tag.accent }}" style="--weight: {{ tag.post_count }}" href="{{ tag.get_absolute_url }}">#{{ tag.name }}<span>{{ tag.post_count }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="side-card archive-now">
+      <span class="archive-now-mark">⌁</span>
+      <p class="aside-label">CURRENTLY</p>
+      <p>{{ site.status }}</p>
+      <a class="text-link" href="{% url 'blog:about' %}">当前计划 <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

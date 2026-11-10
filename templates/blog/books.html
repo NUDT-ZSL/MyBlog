@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="page-hero page-hero--books">
+  <div class="container">
+    <div class="page-hero-top">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>BOOKSHELF / MARGINALIA</p>
+      <span class="page-count">{{ total_books }} <small>books</small></span>
+    </div>
+    <div class="page-hero-grid">
+      <div>
+        <h1 class="page-title">读过的<span class="title-accent">和</span>没读完的</h1>
+        <p class="page-lead">专业书用来打地基，闲书用来提醒自己世界比编译器大。评分非常主观，短评可能比书还短。</p>
+      </div>
+      <aside class="page-hero-aside">
+        <p class="aside-label">CURRENTLY</p>
+        <p>在读 {{ status_counts.reading }} 本<br>待读 {{ status_counts.queued }} 本</p>
+        <span class="archive-aside-note">读完 {{ status_counts.finished }} 本</span>
+      </aside>
+    </div>
+    <div class="bookshelf-stats">
+      <span><i></i>在读</span>
+      <span><i></i>读完</span>
+      <span><i></i>待读</span>
+      <p>“买书如山倒，读书如抽丝。”</p>
+    </div>
+  </div>
+</section>
+
+<div class="container books-layout">
+  <div class="books-main">
+    {% for category, book_list in grouped_books.items %}
+      <section class="shelf-section">
+        <div class="shelf-head">
+          <span class="section-index">0{{ forloop.counter }}</span>
+          <h2>{{ category }}</h2>
+          <span>{{ book_list|length }} 本</span>
+          <i></i>
+        </div>
+        <div class="book-grid">
+          {% for book in book_list %}
+            <article class="book-card accent-{{ book.accent }}">
+              <div class="book-spine">
+                <span class="book-spine-label">{{ book.category }}</span>
+                <span class="book-spine-title">{{ book.title }}</span>
+              </div>
+              <div class="book-body">
+                <div class="book-top">
+                  <span class="book-status status-{{ book.status }}">{{ book.get_status_display }}</span>
+                  <span class="book-stars" aria-label="评分 {{ book.rating }} / 5">{{ book.rating|stars }}</span>
+                </div>
+                <h3>{{ book.title }}</h3>
+                <p class="book-author">{{ book.author }}</p>
+                {% if book.review %}<p class="book-review">{{ book.review }}</p>{% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% empty %}
+      <div class="empty-state empty-state--large"><span class="empty-mark">∅</span><h2>书架是空的</h2><p>等第一本书被放上来。</p></div>
+    {% endfor %}
+  </div>
+
+  <aside class="books-aside">
+    <div class="side-card reading-card">
+      <span class="reading-mark">“</span>
+      <p class="aside-label">A NOTE ON READING</p>
+      <p>读书不是 KPI。有些书用来查，有些书用来迷路，还有一些只是放在桌上，提醒自己还有问题没想完。</p>
+      <span class="reading-sign">— {{ site.owner }}</span>
+    </div>
+
+    <div class="side-card">
+      <p class="aside-label">SHELF INDEX</p>
+      <div class="shelf-index">
+        {% for category, book_list in grouped_books.items %}
+          <a href="#">{{ category }} <span>{{ book_list|length }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="side-card">
+      <p class="aside-label">RECOMMEND</p>
+      <p>如果你也在做程序分析，欢迎交换书单。尤其想找一本把抽象解释讲得既严格又不劝退的书。</p>
+      <a class="text-link" href="mailto:{{ site.email }}?subject=书单交换">来信推荐 <span aria-hidden="true">↗</span></a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

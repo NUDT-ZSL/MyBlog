@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-top">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>
+        {% if category %}CATEGORY / {{ category.accent|upper }}{% elif tag %}TAG / {{ tag.slug|upper }}{% else %}WRITING / ARCHIVE{% endif %}
+      </p>
+      <span class="page-count">{{ page_obj.paginator.count|default:posts|length }} <small>entries</small></span>
+    </div>
+    <div class="page-hero-grid">
+      <div>
+        <h1 class="page-title">
+          {% if category %}<span class="title-icon">{{ category.icon }}</span>{{ category.name }}
+          {% elif tag %}<span class="title-hash">#</span>{{ tag.name }}
+          {% else %}写下来的<span class="title-accent">问题</span>{% endif %}
+        </h1>
+        <p class="page-lead">
+          {% if category %}{{ category.description|default:"这个分类下的全部文章。" }}
+          {% elif tag %}所有带有「{{ tag.name }}」标签的文章与卡片。
+          {% else %}科研笔记、工程踩坑、算法题解和一些不必严肃的时刻。文章按时间排列，没有推荐流。{% endif %}
+        </p>
+      </div>
+      <aside class="page-hero-aside">
+        <p class="aside-label">INDEX</p>
+        <p>文章是打磨后的输出；<br>知识库是持续生长的第二大脑。</p>
+        <a class="text-link" href="{% url 'blog:note_list' %}">去看看卡片 <span aria-hidden="true">→</span></a>
+      </aside>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-chips" role="navigation" aria-label="文章分类">
+        <a class="filter-chip {% if not category and not tag %}is-active{% endif %}" href="{% url 'blog:post_list' %}">全部 <span>{{ total_posts|default:'' }}</span></a>
+        {% for item in categories %}
+          <a class="filter-chip {% if category and category.pk == item.pk %}is-active{% endif %}" href="{{ item.get_absolute_url }}">{{ item.icon }} {{ item.name }} <span>{{ item.post_count }}</span></a>
+        {% endfor %}
+      </div>
+      <form class="inline-search" action="{% url 'blog:post_list' %}" method="get" role="search">
+        <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+        <input type="search" name="q" value="{{ query }}" placeholder="筛选标题或标签…" aria-label="筛选文章">
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="container content-layout">
+  <div class="content-main">
+    {% if query %}
+      <div class="result-bar">
+        <p>“{{ query }}” 的筛选结果</p>
+        <a href="{% url 'blog:post_list' %}">清除筛选 <span aria-hidden="true">×</span></a>
+      </div>
+    {% endif %}
+
+    <div class="post-list">
+      {% for post in posts %}
+        {% include "partials/post_row.html" with post=post %}
+      {% empty %}
+        <div class="empty-state empty-state--large">
+          <span class="empty-mark">∅</span>
+          <h2>这里还没有文章</h2>
+          <p>可能是筛选条件太窄，也可能只是还没写到这里。</p>
+          <a class="button button-ghost" href="{% url 'blog:post_list' %}">回到全部文章</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% include "partials/pagination.html" %}
+
+    {% if tag_notes %}
+      <section class="tag-notes">
+        <div class="section-head section-head--small">
+          <div class="section-head-copy">
+            <p class="eyebrow">RELATED NOTES</p>
+            <h2>同标签的知识卡片</h2>
+          </div>
+        </div>
+        <div class="note-grid">
+          {% for note in tag_notes %}{% include "partials/note_card.html" with note=note %}{% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
+
+  {% include "partials/sidebar.html" %}
+</div>
+{% endblock %}

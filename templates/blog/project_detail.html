@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block content %}
+<article class="project-detail">
+  <header class="project-detail-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="{% url 'blog:home' %}">首页</a><span>/</span>
+        <a href="{% url 'blog:project_list' %}">项目</a><span>/</span>
+        <span>{{ project.title }}</span>
+      </nav>
+      <div class="project-detail-grid">
+        <div class="project-detail-copy">
+          <div class="project-kicker">
+            <span>{{ project.get_category_display }}</span>
+            <span class="status-{{ project.status }}">{% if project.status == 'wip' %}<span class="pulse-dot"></span>{% endif %}{{ project.get_status_display }}</span>
+            <span>{{ project.launched_at|date:"Y.m" }} — PRESENT</span>
+          </div>
+          <h1>{{ project.title }}</h1>
+          <p class="page-lead">{{ project.subtitle }}</p>
+        </div>
+        <div class="project-detail-cover">
+          <img src="{% static 'img/projects/'|add:project.cover_style|add:'.svg' %}" alt="{{ project.title }} 的示意图" width="800" height="450">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container project-detail-layout">
+    <div class="project-detail-main">
+      <div class="prose">
+        {% if rendered %}
+          {{ rendered.html|safe }}
+        {% else %}
+          <p>{{ project.summary }}</p>
+        {% endif %}
+      </div>
+
+      <div class="project-detail-bottom">
+        <div class="project-tags">
+          {% for tech in project.stack %}<span>{{ tech }}</span>{% endfor %}
+        </div>
+        <div class="project-detail-links">
+          {% if project.repo_url %}<a class="button button-primary" href="{{ project.repo_url }}" target="_blank" rel="noopener noreferrer">查看源码 <svg class="icon" aria-hidden="true"><use href="#icon-github"></use></svg></a>{% endif %}
+          {% if project.demo_url %}<a class="button button-ghost" href="{{ project.demo_url }}" target="_blank" rel="noopener noreferrer">在线演示 <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg></a>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <aside class="project-aside">
+      <div class="aside-block">
+        <p class="aside-label">STATUS</p>
+        <div class="project-progress-big">
+          <strong>{{ project.progress }}<small>%</small></strong>
+          <div class="progress"><span class="progress-bar" style="--progress: {{ project.progress }}%"></span></div>
+          <span>{{ project.get_status_display }}</span>
+        </div>
+        <dl class="project-meta">
+          <div><dt>类别</dt><dd>{{ project.get_category_display }}</dd></div>
+          <div><dt>开始</dt><dd>{{ project.launched_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>更新</dt><dd>{{ project.updated_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>技术栈</dt><dd>{{ project.tech_stack }}</dd></div>
+        </dl>
+      </div>
+      <div class="aside-block">
+        <p class="aside-label">LINKS</p>
+        <div class="project-aside-links">
+          {% if project.repo_url %}<a href="{{ project.repo_url }}" target="_blank" rel="noopener noreferrer">GitHub <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>{% endif %}
+          {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank" rel="noopener noreferrer">Live Demo <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>{% endif %}
+          <a href="mailto:{{ site.email }}">讨论这个项目 <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg></a>
+        </div>
+      </div>
+      <a class="aside-back" href="{% url 'blog:project_list' %}">
+        <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+        返回项目列表
+      </a>
+    </aside>
+  </div>
+</article>
+
+{% if related_projects %}
+<section class="related-projects">
+  <div class="container">
+    <div class="section-head section-head--small">
+      <div class="section-head-copy"><p class="eyebrow">MORE WORK</p><h2>再看看别的</h2></div>
+      <a class="section-link" href="{% url 'blog:project_list' %}">全部项目 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></a>
+    </div>
+    <div class="project-grid project-grid--two">
+      {% for project in related_projects %}{% include "partials/project_card.html" with project=project %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

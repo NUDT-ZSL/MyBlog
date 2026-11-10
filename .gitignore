@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# Local environment
+.env
+
+# Vendored wheels / extracted packages
+vendor/
+
+# Scratch files
+tmp/
+.tmp/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

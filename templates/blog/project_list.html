@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="page-hero page-hero--projects">
+  <div class="container">
+    <div class="page-hero-top">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>BUILD LOG / SELECTED WORK</p>
+      <span class="page-count">{{ project_counts.all }} <small>projects</small></span>
+    </div>
+    <div class="page-hero-grid">
+      <div>
+        <h1 class="page-title">把想法<span class="title-accent">编译</span>成东西</h1>
+        <p class="page-lead">从 LLVM Pass 到 Verilog 波形，从静态分析原型到一间玉器小店。这里记录已经跑起来的，和还在报错的。</p>
+      </div>
+      <aside class="page-hero-aside">
+        <p class="aside-label">PRINCIPLE</p>
+        <p>先让它正确，<br>再让它好看。<br>最后再想怎么快。</p>
+      </aside>
+    </div>
+    <div class="project-stats">
+      <div><strong>{{ project_counts.research }}</strong><span>科研原型</span></div>
+      <div><strong>{{ project_counts.engineering }}</strong><span>工程实践</span></div>
+      <div><strong>{{ project_counts.demo }}</strong><span>学习 Demo</span></div>
+      <div><strong>{{ project_counts.wip }}</strong><span>正在构建</span></div>
+    </div>
+  </div>
+</section>
+
+{% if wip_projects %}
+<section class="wip-section">
+  <div class="container">
+    <header class="section-head">
+      <div class="section-head-copy">
+        <span class="section-index">01</span>
+        <p class="eyebrow"><span class="pulse-dot"></span>ON THE BENCH</p>
+        <h2>正在进行</h2>
+      </div>
+      <span class="section-note">未完成，但值得被看见</span>
+    </header>
+    <div class="wip-list">
+      {% for project in wip_projects %}
+        <article class="wip-card">
+          <div class="wip-number">0{{ forloop.counter }}</div>
+          <div class="wip-main">
+            <div class="project-kicker"><span>{{ project.get_category_display }}</span><span class="is-wip">{{ project.get_status_display }}</span></div>
+            <h3><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+            <p>{{ project.subtitle }}</p>
+            <div class="project-stack">{% for tech in project.stack|slice:":5" %}<span>{{ tech }}</span>{% endfor %}</div>
+          </div>
+          <div class="wip-progress">
+            <span class="wip-percent">{{ project.progress }}<small>%</small></span>
+            <div class="progress"><span class="progress-bar" style="--progress: {{ project.progress }}%"></span></div>
+            <span class="wip-updated">updated {{ project.updated_at|date:"m.d" }}</span>
+          </div>
+          <a class="wip-link" href="{{ project.get_absolute_url }}" aria-label="查看 {{ project.title }}">
+            <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="projects-index">
+  <div class="container">
+    <header class="section-head">
+      <div class="section-head-copy">
+        <span class="section-index">02</span>
+        <p class="eyebrow">PROJECT INDEX</p>
+        <h2>全部项目</h2>
+      </div>
+      <span class="section-note">按类别筛选</span>
+    </header>
+
+    <div class="project-filter" role="group" aria-label="项目筛选">
+      <button class="filter-chip is-active" type="button" data-project-filter="all">全部 <span>{{ project_counts.all }}</span></button>
+      <button class="filter-chip" type="button" data-project-filter="research">科研 <span>{{ project_counts.research }}</span></button>
+      <button class="filter-chip" type="button" data-project-filter="engineering">工程 <span>{{ project_counts.engineering }}</span></button>
+      <button class="filter-chip" type="button" data-project-filter="demo">学习 Demo <span>{{ project_counts.demo }}</span></button>
+    </div>
+
+    <div class="project-grid" data-project-grid>
+      {% for project in projects %}
+        {% include "partials/project_card.html" with project=project %}
+      {% empty %}
+        <div class="empty-state"><span class="empty-mark">∅</span><p>项目还在本地分支。</p></div>
+      {% endfor %}
+    </div>
+    <div class="project-empty" data-project-empty hidden>
+      <span class="empty-mark">∅</span>
+      <p>这个类别暂时没有项目。</p>
+    </div>
+  </div>
+</section>
+
+<section class="project-cta">
+  <div class="container project-cta-inner">
+    <div>
+      <p class="eyebrow"><span class="eyebrow-dot"></span>COLLABORATE?</p>
+      <h2>有想法，或者发现了一个 bug？</h2>
+      <p>欢迎在 GitHub 提 issue，或者直接写信。对于编译器、程序分析和奇奇怪怪的工程问题，我通常都很有兴趣。</p>
+    </div>
+    <div class="project-cta-actions">
+      <a class="button button-primary" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+      <a class="button button-ghost" href="mailto:{{ site.email }}">写信 <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

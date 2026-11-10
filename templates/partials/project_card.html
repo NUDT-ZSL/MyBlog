@@ -1,0 +1,25 @@
+{% load static blog_extras %}
+<article class="project-card" data-category="{{ project.category }}" data-status="{{ project.status }}" data-title="{{ project.title }}">
+  <a class="project-cover" href="{{ project.get_absolute_url }}" aria-label="查看项目：{{ project.title }}">
+    <img src="{% static 'img/projects/'|add:project.cover_style|add:'.svg' %}" alt="" loading="lazy" width="800" height="450">
+    <span class="project-status status-{{ project.status }}">{% if project.status == 'wip' %}<span class="pulse-dot"></span>{% endif %}{{ project.get_status_display }}</span>
+    <span class="project-arrow"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></span>
+  </a>
+  <div class="project-body">
+    <div class="project-kicker">
+      <span>{{ project.get_category_display }}</span>
+      <span>{{ project.launched_at|date:"Y" }}</span>
+    </div>
+    <h3><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+    <p class="project-subtitle">{{ project.subtitle }}</p>
+    <div class="project-stack">
+      {% for tech in project.stack|slice:":4" %}<span>{{ tech }}</span>{% endfor %}
+    </div>
+    <div class="project-foot">
+      <div class="progress" aria-label="完成度 {{ project.progress }}%">
+        <span class="progress-bar" style="--progress: {{ project.progress }}%"></span>
+      </div>
+      <span class="progress-label">{{ project.progress }}%</span>
+    </div>
+  </div>
+</article>

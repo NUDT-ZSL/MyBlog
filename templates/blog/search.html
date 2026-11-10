@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+
+{% block content %}
+<section class="search-page-hero">
+  <div class="container">
+    <p class="eyebrow"><span class="eyebrow-dot"></span>SEARCH / THE WHOLE ARCHIVE</p>
+    <h1>找点<span class="title-accent">什么</span>？</h1>
+    <form class="search-page-form" action="{% url 'blog:search' %}" method="get" role="search">
+      <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+      <input type="search" name="q" value="{{ query }}" placeholder="输入关键词：LLVM、SSA、Verilog、抽象解释…" autofocus aria-label="搜索关键词">
+      <button type="submit">搜索 <span aria-hidden="true">→</span></button>
+    </form>
+    <div class="search-page-meta">
+      {% if query %}
+        <span>“{{ query }}” · {{ total }} 个结果</span>
+        <a href="{% url 'blog:search' %}">清空</a>
+      {% else %}
+        <span>文章 · 知识卡片 · 项目</span>
+        <span>不会记录你的搜索历史</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="container search-results-page">
+  {% if query %}
+    {% if posts %}
+      <section class="search-result-section">
+        <div class="search-result-head"><h2>文章</h2><span>{{ posts|length }}</span></div>
+        <div class="search-result-list">
+          {% for post in posts %}
+            <a class="search-result" href="{{ post.get_absolute_url }}">
+              <span class="search-result-kind">文章</span>
+              <span class="search-result-body">
+                <strong>{{ post.title }}</strong>
+                <span>{{ post.summary }}</span>
+                <em>{{ post.category.name }} · {{ post.published_at|date:"Y.m.d" }} · {{ post.reading_minutes }} min</em>
+              </span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if notes %}
+      <section class="search-result-section">
+        <div class="search-result-head"><h2>知识卡片</h2><span>{{ notes|length }}</span></div>
+        <div class="search-result-list">
+          {% for note in notes %}
+            <a class="search-result" href="{{ note.get_absolute_url }}">
+              <span class="search-result-kind kind-note">笔记</span>
+              <span class="search-result-body">
+                <strong>{{ note.title }}</strong>
+                <span>{{ note.summary }}</span>
+                <em>{{ note.get_note_type_display }} · {{ note.updated_at|date:"Y.m.d" }}</em>
+              </span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if projects %}
+      <section class="search-result-section">
+        <div class="search-result-head"><h2>项目</h2><span>{{ projects|length }}</span></div>
+        <div class="search-result-list">
+          {% for project in projects %}
+            <a class="search-result" href="{{ project.get_absolute_url }}">
+              <span class="search-result-kind kind-project">项目</span>
+              <span class="search-result-body">
+                <strong>{{ project.title }}</strong>
+                <span>{{ project.subtitle }}</span>
+                <em>{{ project.get_category_display }} · {{ project.tech_stack }}</em>
+              </span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if not total %}
+      <div class="search-no-result">
+        <span class="search-no-mark">∅</span>
+        <h2>没有找到“{{ query }}”</h2>
+        <p>检查一下拼写，或者试试更短的关键词。也可以从标签开始浏览。</p>
+        <div class="search-suggestions">
+          <a href="?q=LLVM">LLVM</a>
+          <a href="?q=SSA">SSA</a>
+          <a href="?q=Verilog">Verilog</a>
+          <a href="?q=静态分析">静态分析</a>
+          <a href="?q=玉">玉</a>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="search-landing">
+      <div class="search-landing-note">
+        <p class="aside-label">HOW IT WORKS</p>
+        <p>搜索会同时检索文章正文、知识卡片和项目介绍。没有分词服务，也没有向量数据库——对一个小站来说，SQLite 的 <code>LIKE</code> 已经足够。</p>
+      </div>
+      <div class="search-tags">
+        <p class="aside-label">POPULAR TAGS</p>
+        <div class="search-suggestions">
+          <a href="?q=LLVM">LLVM</a>
+          <a href="?q=SSA">SSA</a>
+          <a href="?q=支配边界">支配边界</a>
+          <a href="?q=Verilog">Verilog</a>
+          <a href="?q=抽象解释">抽象解释</a>
+          <a href="?q=LoRA">LoRA</a>
+          <a href="?q=玉">玉</a>
+          <a href="?q=游戏">游戏</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

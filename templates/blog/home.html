@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-grid container">
+    <div class="hero-copy">
+      <p class="eyebrow hero-eyebrow"><span class="eyebrow-dot"></span>{{ site.hero_kicker }}</p>
+
+      <div class="hero-identity">
+        <div class="avatar-frame">
+          <img src="{% static site.avatar %}" alt="{{ site.owner }} 的头像" width="80" height="80">
+          <span class="avatar-ring" aria-hidden="true"></span>
+        </div>
+        <div class="identity-copy">
+          <span>你好，我是</span>
+          <strong>{{ site.owner }}</strong>
+        </div>
+        <span class="availability"><span class="pulse-dot"></span>OPEN TO TALK</span>
+      </div>
+
+      <h1 class="hero-title">
+        {{ site.hero_title_a }}<br>
+        <span>{{ site.hero_title_b }}</span>
+      </h1>
+      <p class="hero-lead">{{ site.description }}</p>
+      <p class="hero-sub">{{ site.hero_text }}</p>
+
+      <div class="hero-actions">
+        <a class="button button-primary" href="#recent">
+          读最新文章
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+        </a>
+        <a class="button button-ghost" href="{% url 'blog:project_list' %}">
+          看看项目
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+        </a>
+      </div>
+
+      <div class="hero-socials">
+        <span class="hero-socials-label">ELSEWHERE</span>
+        {% for social in socials %}
+          <a href="{{ social.url }}" {% if social.url|slice:':4' == 'http' %}target="_blank" rel="noopener noreferrer"{% endif %}>
+            <svg class="icon" aria-hidden="true"><use href="#icon-{{ social.icon }}"></use></svg>
+            <span>{{ social.label }}</span>
+          </a>
+        {% endfor %}
+      </div>
+
+      <div class="hero-keywords" aria-label="关注领域">
+        {% for keyword in site.keywords %}<span>{{ keyword }}</span>{% endfor %}
+      </div>
+    </div>
+
+    <div class="hero-stage">
+      <div class="stage-orbit stage-orbit--one" aria-hidden="true"></div>
+      <div class="stage-orbit stage-orbit--two" aria-hidden="true"></div>
+      <span class="stage-node stage-node--a" aria-hidden="true">SSA</span>
+      <span class="stage-node stage-node--b" aria-hidden="true">DFA</span>
+      <span class="stage-node stage-node--c" aria-hidden="true">IR</span>
+
+      <div class="terminal-card">
+        <div class="terminal-head">
+          <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="terminal-title">lin@ir: ~/workspace</span>
+          <span class="terminal-status">zsh</span>
+        </div>
+        <div class="terminal-body" aria-label="终端风格的自我介绍">
+          <div class="console-line"><span class="console-prompt">$</span> whoami</div>
+          <div class="console-output">phd1 · high-confidence software</div>
+          <div class="console-line"><span class="console-prompt">$</span> cat focus.txt</div>
+          <div class="console-output">llvm <span class="console-accent">/</span> static-analysis <span class="console-accent">/</span> verilog</div>
+          <div class="console-line"><span class="console-prompt">$</span> ./now --status</div>
+          <div class="console-output"><span class="console-ok">[running]</span> dataflow analysis<span class="console-cursor"></span></div>
+          <div class="console-line console-line--muted"><span class="console-prompt">$</span> uname -m</div>
+          <div class="console-output console-output--muted">x86_64 · coffee-powered</div>
+        </div>
+        <div class="terminal-foot">
+          <span>UTF-8</span>
+          <span>LLVM 19</span>
+          <span class="terminal-online"><i></i> online</span>
+        </div>
+      </div>
+
+      <div class="stage-caption">
+        <span class="stage-caption-index">01</span>
+        <p>Trust, but verify.<br><span>Then write it down.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="quick-links">
+      {% for link in quick_links %}
+        <a class="quick-link" href="{{ link.url }}">
+          <span class="quick-icon"><svg class="icon" aria-hidden="true"><use href="#icon-{{ link.icon }}"></use></svg></span>
+          <span class="quick-copy"><strong>{{ link.label }}</strong><small>{{ link.caption }}</small></span>
+          <svg class="icon quick-arrow" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="signal-strip" aria-hidden="true">
+  <div class="container signal-inner">
+    <span>SSA</span><i>◇</i><span>DOMINANCE</span><i>◇</i><span>DATA-FLOW</span><i>◇</i><span>VERIFICATION</span><i>◇</i><span>VERILOG</span><i>◇</i><span>COFFEE</span><i>◇</i><span>JADE</span>
+  </div>
+</div>
+
+<div class="container home-layout">
+  <div class="home-main">
+    {% if statuses %}
+    <section class="now-panel" aria-labelledby="now-heading">
+      <div class="now-head">
+        <span class="now-label"><span class="pulse-dot"></span>NOW</span>
+        <h2 id="now-heading">最近在做什么</h2>
+        <span class="now-note">a tiny status feed</span>
+      </div>
+      <ol class="status-list">
+        {% for status in statuses %}
+          <li>
+            <span class="status-marker status-{{ status.mood }}"></span>
+            <p>{{ status.text }}</p>
+            <span class="status-meta">{{ status.get_mood_display }} · {{ status.created_at|date:"m.d" }}</span>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+
+    <section class="home-section" id="recent">
+      <header class="section-head">
+        <div class="section-head-copy">
+          <span class="section-index">01</span>
+          <p class="eyebrow">LATEST WRITING</p>
+          <h2>最近更新</h2>
+        </div>
+        <a class="section-link" href="{% url 'blog:post_list' %}">全部文章 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></a>
+      </header>
+
+      {% if recent_posts %}
+        <div class="post-grid">
+          {% for post in recent_posts %}
+            {% if forloop.first %}
+              {% include "partials/post_card.html" with post=post lead=True %}
+            {% else %}
+              {% include "partials/post_card.html" with post=post %}
+            {% endif %}
+          {% endfor %}
+          <a class="post-card post-card--more" href="{% url 'blog:post_list' %}">
+            <span class="post-more-index">/ ALL</span>
+            <strong>还有更多<br>在归档里。</strong>
+            <span class="post-more-count">{{ total_posts }} 篇文章 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></span>
+          </a>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <span class="empty-mark">∅</span>
+          <p>第一篇文章还在草稿箱里。</p>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="home-section">
+      <header class="section-head">
+        <div class="section-head-copy">
+          <span class="section-index">02</span>
+          <p class="eyebrow">SELECTED WORK</p>
+          <h2>在做的东西</h2>
+        </div>
+        <a class="section-link" href="{% url 'blog:project_list' %}">全部项目 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></a>
+      </header>
+
+      <div class="project-preview-grid">
+        {% for project in featured_projects %}
+          <article class="project-mini">
+            <a href="{{ project.get_absolute_url }}" class="project-mini-cover">
+              <img src="{% static 'img/projects/'|add:project.cover_style|add:'.svg' %}" alt="" loading="lazy" width="800" height="450">
+              <span class="project-mini-index">0{{ forloop.counter }}</span>
+            </a>
+            <div class="project-mini-body">
+              <div class="project-kicker"><span>{{ project.get_category_display }}</span><span class="{% if project.status == 'wip' %}is-wip{% endif %}">{{ project.get_status_display }}</span></div>
+              <h3><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+              <p>{{ project.subtitle }}</p>
+              <div class="project-mini-foot">
+                <span>{{ project.tech_stack }}</span>
+                <a href="{{ project.get_absolute_url }}" aria-label="查看 {{ project.title }}"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg></a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="home-section knowledge-teaser">
+      <div class="knowledge-copy">
+        <span class="section-index">03</span>
+        <p class="eyebrow">SECOND BRAIN</p>
+        <h2>知识不是收藏，<br>是连接。</h2>
+        <p>这里放还没长成文章的碎片：概念卡、速查表、报错记录。它们会互相引用，也会慢慢长出新的问题。</p>
+        <a class="button button-ghost" href="{% url 'blog:note_list' %}">
+          进入知识库
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+        </a>
+      </div>
+      <div class="knowledge-list">
+        {% for note in latest_notes %}
+          <a class="knowledge-note" href="{{ note.get_absolute_url }}">
+            <span class="knowledge-note-type">{{ note.type_label }}</span>
+            <strong>{{ note.title }}</strong>
+            <span>{{ note.summary }}</span>
+            <em>{{ note.updated_at|date:"Y.m.d" }} 更新</em>
+          </a>
+        {% empty %}
+          <p class="knowledge-empty">知识库正在加载。</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  {% include "partials/sidebar.html" %}
+</div>
+
+<section class="home-closing">
+  <div class="container home-closing-inner">
+    <p class="eyebrow"><span class="eyebrow-dot"></span>ONE MORE THING</p>
+    <p class="closing-quote">“写代码，也写清楚为什么。”</p>
+    <p class="closing-sub">这个站点用 Django 搭建，没有推荐算法，只有按时间排列的文字。</p>
+    <div class="closing-actions">
+      <a href="mailto:{{ site.email }}" class="text-link">写信给我 <span aria-hidden="true">↗</span></a>
+      <a href="{% url 'blog:about' %}" class="text-link">关于这张网页背后的人 <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

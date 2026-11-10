@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="LLVM Pass 控制流图封面">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#9bb3c4" stroke-opacity="0.07"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#61d7bd" fill-opacity="0.8"/>
+    </marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1820"/><stop offset="1" stop-color="#071016"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <text x="40" y="52" font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#61d7bd" letter-spacing="3">MODULE PASS / 01</text>
+  <text x="40" y="82" font-family="Cascadia Code, Consolas, monospace" font-size="9" fill="#637586" letter-spacing="2">CFG + DOMINATOR TREE</text>
+  <text x="760" y="418" text-anchor="end" font-family="Cascadia Code, Consolas, monospace" font-size="86" fill="#9bb3c4" fill-opacity="0.05">CFG</text>
+  <g stroke="#61d7bd" stroke-opacity="0.55" stroke-width="1.4" fill="none" marker-end="url(#arrow)">
+    <path d="M165 120h100"/>
+    <path d="M335 140v55a30 30 0 0 0 30 30h40"/>
+    <path d="M335 140v125a30 30 0 0 1-30 30h-40"/>
+    <path d="M335 140h120"/>
+    <path d="M525 140v105"/>
+    <path d="M525 290h-100"/>
+    <path d="M625 275v55"/>
+    <path d="M445 315h180"/>
+  </g>
+  <g stroke="#e7b76b" stroke-opacity="0.55" stroke-width="1.2" fill="none" stroke-dasharray="5 5" marker-end="url(#arrow)">
+    <path d="M570 345h90a26 26 0 0 0 26-26v-153a26 26 0 0 0-26-26H620"/>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#dce6ef">
+    <g>
+      <rect x="65" y="95" width="100" height="50" rx="7" fill="#0f1f26" stroke="#61d7bd" stroke-opacity="0.45"/>
+      <text x="115" y="118" text-anchor="middle" fill="#8fa3b4" font-size="8">ENTRY</text>
+      <text x="115" y="133" text-anchor="middle" font-size="10">%entry</text>
+    </g>
+    <g>
+      <rect x="275" y="95" width="120" height="50" rx="7" fill="#10241f" stroke="#61d7bd" stroke-opacity="0.8"/>
+      <text x="335" y="118" text-anchor="middle" fill="#61d7bd" font-size="8">LOOP HEADER</text>
+      <text x="335" y="133" text-anchor="middle" font-size="10">phi / icmp</text>
+    </g>
+    <g>
+      <rect x="465" y="95" width="120" height="50" rx="7" fill="#0f1f26" stroke="#9bb3c4" stroke-opacity="0.3"/>
+      <text x="525" y="118" text-anchor="middle" fill="#8fa3b4" font-size="8">BODY</text>
+      <text x="525" y="133" text-anchor="middle" font-size="10">load / add</text>
+    </g>
+    <g>
+      <rect x="385" y="290" width="120" height="50" rx="7" fill="#0f1f26" stroke="#9bb3c4" stroke-opacity="0.3"/>
+      <text x="445" y="313" text-anchor="middle" fill="#8fa3b4" font-size="8">LATCH</text>
+      <text x="445" y="328" text-anchor="middle" font-size="10">br loop</text>
+    </g>
+    <g>
+      <rect x="625" y="250" width="120" height="50" rx="7" fill="#1b1710" stroke="#e7b76b" stroke-opacity="0.55"/>
+      <text x="685" y="273" text-anchor="middle" fill="#e7b76b" font-size="8">MERGE</text>
+      <text x="685" y="288" text-anchor="middle" font-size="10">phi %x</text>
+    </g>
+  </g>
+  <g stroke="#e7b76b" stroke-opacity="0.8" fill="none">
+    <path d="M430 72v-18h65" stroke-width="1"/>
+    <text x="505" y="58" font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#e7b76b">backedge</text>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586">
+    <text x="40" y="410">verify ✓</text>
+    <text x="40" y="426">dom-tree ✓</text>
+    <text x="120" y="410">@llvm.19</text>
+    <text x="120" y="426">O2 / noalias</text>
+  </g>
+  <circle cx="716" cy="86" r="3" fill="#61d7bd" filter="url(#glow)"/>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="IR 之下头像">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1a22"/>
+      <stop offset="0.55" stop-color="#081016"/>
+      <stop offset="1" stop-color="#0a1a17"/>
+    </linearGradient>
+    <linearGradient id="jade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9cf7df" stop-opacity="0.95"/>
+      <stop offset="0.48" stop-color="#55cdb3" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#2b786c" stop-opacity="0.3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#61d7bd" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#61d7bd" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#9bb3c4" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+    <clipPath id="clip"><rect width="480" height="480" rx="0"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="480" height="480" fill="url(#bg)"/>
+    <rect width="480" height="480" fill="url(#grid)"/>
+    <circle cx="240" cy="236" r="208" fill="url(#glow)"/>
+    <circle cx="240" cy="238" r="168" fill="none" stroke="#9bb3c4" stroke-opacity="0.12"/>
+    <circle cx="240" cy="238" r="204" fill="none" stroke="#61d7bd" stroke-opacity="0.2" stroke-dasharray="2 9"/>
+    <path d="M326 94c-46-31-113-27-153 13-43 43-45 115-3 160 44 48 126 52 173 5 32-32 40-76 26-115-8-22-24-47-43-63Z"
+          fill="url(#jade)"/>
+    <path d="M326 94c-46-31-113-27-153 13-43 43-45 115-3 160 44 48 126 52 173 5 32-32 40-76 26-115-8-22-24-47-43-63Z"
+          fill="none" stroke="#b8ffe9" stroke-opacity="0.35"/>
+    <circle cx="147" cy="120" r="5" fill="#d8fff4"/>
+    <circle cx="339" cy="301" r="7" fill="#61d7bd" fill-opacity="0.55"/>
+    <circle cx="115" cy="317" r="3" fill="#7fa9ff" fill-opacity="0.7"/>
+    <g font-family="Cascadia Code, Consolas, monospace" fill="#071410">
+      <text x="171" y="288" font-size="154" font-weight="700" letter-spacing="-18">IR</text>
+    </g>
+    <g font-family="Cascadia Code, Consolas, monospace" fill="#d8fff4" fill-opacity="0.72" font-size="10" letter-spacing="3">
+      <text x="38" y="442">UNDER THE IR</text>
+      <text x="356" y="442" text-anchor="end">EST. 2024</text>
+    </g>
+    <path d="M38 34h34M38 34v34M442 34h-34M442 34v34M38 446h34M38 446v-34M442 446h-34M442 446v-34"
+          fill="none" stroke="#d8fff4" stroke-opacity="0.35"/>
+  </g>
+</svg>

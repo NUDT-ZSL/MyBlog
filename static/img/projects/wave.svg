@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Verilog UART 波形封面">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#9bb3c4" stroke-opacity="0.07"/>
+    </pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1720"/><stop offset="1" stop-color="#071017"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#61d7bd"/><stop offset="1" stop-color="#7fa9ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <text x="40" y="52" font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#61d7bd" letter-spacing="3">VERILOG / 03</text>
+  <text x="40" y="82" font-family="Cascadia Code, Consolas, monospace" font-size="9" fill="#637586" letter-spacing="2">UART · VERILATOR · VCD</text>
+  <text x="760" y="418" text-anchor="end" font-family="Cascadia Code, Consolas, monospace" font-size="86" fill="#9bb3c4" fill-opacity="0.05">UART</text>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="9" fill="#8fa3b4">
+    <text x="60" y="142">clk</text>
+    <text x="60" y="220">tx</text>
+    <text x="60" y="298">valid</text>
+  </g>
+  <g stroke="#9bb3c4" stroke-opacity="0.16" stroke-width="1">
+    <path d="M120 121h620M120 200h620M120 278h620"/>
+  </g>
+  <path d="M120 138h620" stroke="#7fa9ff" stroke-opacity="0.55" stroke-width="1.3"/>
+  <g stroke="#7fa9ff" stroke-opacity="0.35" stroke-width="1">
+    <path d="M132 126v24M156 126v24M180 126v24M204 126v24M228 126v24M252 126v24M276 126v24M300 126v24M324 126v24M348 126v24M372 126v24M396 126v24M420 126v24M444 126v24M468 126v24M492 126v24M516 126v24M540 126v24M564 126v24M588 126v24M612 126v24M636 126v24M660 126v24M684 126v24M708 126v24"/>
+  </g>
+  <path d="M120 200h50v-36h48v36h48v-36h48v36h48v-36h48v36h48v-36h48v36h48v-36h48v36h48v-36h48v36h48v-36h48v36h44"
+        fill="none" stroke="url(#wave)" stroke-width="2.2" stroke-linejoin="round"/>
+  <g fill="#61d7bd" fill-opacity="0.9">
+    <circle cx="170" cy="164" r="3"/><circle cx="266" cy="164" r="3"/><circle cx="362" cy="164" r="3"/>
+    <circle cx="458" cy="164" r="3"/><circle cx="554" cy="164" r="3"/><circle cx="650" cy="164" r="3"/>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586" text-anchor="middle">
+    <text x="170" y="155">START</text>
+    <text x="266" y="155">D0</text>
+    <text x="362" y="155">D1</text>
+    <text x="458" y="155">D2</text>
+    <text x="554" y="155">D3</text>
+    <text x="650" y="155">D4</text>
+    <text x="716" y="155">STOP</text>
+  </g>
+  <g stroke="#61d7bd" stroke-opacity="0.55" fill="none">
+    <path d="M200 250h48v28h-48Z" stroke-width="1"/>
+    <path d="M296 250h48v28h-48Z" stroke-width="1"/>
+    <path d="M392 250h48v28h-48Z" stroke-width="1"/>
+    <path d="M488 250h48v28h-48Z" stroke-width="1"/>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#8fa3b4" text-anchor="middle">
+    <text x="224" y="268">0x55</text>
+    <text x="320" y="268">0xAA</text>
+    <text x="416" y="268">0x0F</text>
+    <text x="512" y="268">0xF0</text>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586">
+    <text x="40" y="405">iverilog -g2012 tb_uart.v uart_tx.v</text>
+    <text x="40" y="422" fill="#61d7bd" fill-opacity="0.75">PASS  ·  0 mismatches  ·  1.2 ms</text>
+  </g>
+  <g transform="translate(650 340)">
+    <rect x="0" y="0" width="100" height="44" rx="6" fill="#0f1d25" stroke="#61d7bd" stroke-opacity="0.3"/>
+    <text x="50" y="18" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="7" fill="#637586">SIMULATION</text>
+    <text x="50" y="33" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#61d7bd">PASS</text>
+  </g>
+</svg>

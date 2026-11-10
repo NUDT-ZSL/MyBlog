@@ -1,0 +1,4 @@
+Django==6.0.10
+Markdown==3.10
+Pygments==2.19.2
+tzdata==2025.2

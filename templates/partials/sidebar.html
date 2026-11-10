@@ -1,0 +1,93 @@
+{% load static blog_extras %}
+<aside class="sidebar" aria-label="站点侧栏">
+  <section class="side-card profile-card">
+    <div class="profile-top">
+      <img class="profile-avatar" src="{% static site.avatar %}" alt="{{ site.owner }} 的头像" width="72" height="72">
+      <div>
+        <p class="profile-name">{{ site.owner }}<span class="profile-handle">@{{ site.handle }}</span></p>
+        <p class="profile-role">{{ site.role }}</p>
+      </div>
+    </div>
+    <p class="profile-bio">{{ site.description }}</p>
+    <div class="profile-links">
+      {% for social in socials %}
+        <a href="{{ social.url }}" {% if social.url|slice:':4' == 'http' %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ social.label }} <span aria-hidden="true">↗</span></a>
+      {% endfor %}
+    </div>
+    <a class="side-cta" href="{% url 'blog:about' %}">
+      <span>关于这个人和这个站</span>
+      <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+    </a>
+  </section>
+
+  <section class="side-card">
+    <div class="side-head">
+      <h2>分类</h2>
+      <span class="side-count">{{ total_posts }} POSTS</span>
+    </div>
+    <ul class="category-list">
+      {% for category in sidebar_categories %}
+        <li>
+          <a href="{{ category.get_absolute_url }}">
+            <span class="cat-symbol cat-{{ category.accent }}">{{ category.icon }}</span>
+            <span class="cat-name">{{ category.name }}</span>
+            <span class="cat-count">{{ category.post_count }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="side-card">
+    <div class="side-head">
+      <h2>标签云</h2>
+      <a href="{% url 'blog:archive' %}#tags" class="side-more">全部</a>
+    </div>
+    <div class="tag-cloud">
+      {% for tag in sidebar_tags %}
+        <a class="tag-cloud-item accent-{{ tag.accent }}" style="--weight: {{ tag.post_count }}" href="{{ tag.get_absolute_url }}">#{{ tag.name }}<span>{{ tag.post_count }}</span></a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="side-card">
+    <div class="side-head">
+      <h2>阅读排行</h2>
+      <span class="side-more">TOP 5</span>
+    </div>
+    <ol class="ranking-list">
+      {% for item in popular_posts %}
+        <li>
+          <a href="{{ item.get_absolute_url }}">
+            <span class="ranking-index">0{{ forloop.counter }}</span>
+            <span class="ranking-title">{{ item.title }}</span>
+            <span class="ranking-views">{{ item.views }}<small> views</small></span>
+          </a>
+        </li>
+      {% empty %}
+        <li class="ranking-empty">还没有阅读数据。</li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="side-card stats-card">
+    <div class="side-head">
+      <h2>站点状态</h2>
+      <span class="live-tag"><span class="pulse-dot"></span>LIVE</span>
+    </div>
+    <div class="stats-grid">
+      <div><strong>{{ total_posts }}</strong><span>文章</span></div>
+      <div><strong>{{ total_notes }}</strong><span>卡片</span></div>
+      <div><strong>{{ today_visitors }}</strong><span>今日访客</span></div>
+      <div><strong>{{ total_visitors }}</strong><span>累计访客</span></div>
+    </div>
+    <p class="stats-note">只记录去标识化的每日访客数，不存储 Cookie 画像。</p>
+  </section>
+
+  <section class="side-card rss-card">
+    <span class="rss-orbit" aria-hidden="true"><svg class="icon"><use href="#icon-rss"></use></svg></span>
+    <p class="rss-title">不想错过更新？</p>
+    <p>把本站加入你的 RSS 阅读器，比算法推荐安静一点。</p>
+    <a href="{% url 'blog:rss_feed' %}" class="text-link">订阅 RSS <span aria-hidden="true">→</span></a>
+  </section>
+</aside>

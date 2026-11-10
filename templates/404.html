@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="error-page">
+  <div class="container error-inner">
+    <div class="error-code" aria-hidden="true">404</div>
+    <div class="error-console">
+      <div class="terminal-head">
+        <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="terminal-title">ir: ~/lost</span>
+        <span class="terminal-status">error</span>
+      </div>
+      <div class="terminal-body">
+        <div class="console-line"><span class="console-prompt">$</span> find . -name "this-page"</div>
+        <div class="console-output console-output--muted">find: no such file or directory</div>
+        <div class="console-line"><span class="console-prompt">$</span> cd /</div>
+        <div class="console-output"><span class="console-ok">[ok]</span> let's go home<span class="console-cursor"></span></div>
+      </div>
+    </div>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>PAGE NOT FOUND</p>
+    <h1>这个地址<br>没有对应的页面。</h1>
+    <p class="page-lead">也许链接过期了，也许是我把文件移到了别处。可以回到首页，或者搜索一下。</p>
+    <div class="error-actions">
+      <a class="button button-primary" href="{% url 'blog:home' %}">回到首页 <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></a>
+      <a class="button button-ghost" href="{% url 'blog:search' %}">搜索站内 <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

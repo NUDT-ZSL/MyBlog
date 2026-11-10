@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="本地大模型工具封面">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#9bb3c4" stroke-opacity="0.07"/>
+    </pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1620"/><stop offset="1" stop-color="#071016"/>
+    </linearGradient>
+    <linearGradient id="layer" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#61d7bd" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#7fa9ff" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <text x="40" y="52" font-family="Cascadia Code, Consolas, monospace" font-size="11" fill="#7fa9ff" letter-spacing="3">LOCAL LLM KIT / 06</text>
+  <text x="40" y="82" font-family="Cascadia Code, Consolas, monospace" font-size="9" fill="#637586" letter-spacing="2">LORA · PEFT · VLLM</text>
+  <text x="760" y="418" text-anchor="end" font-family="Cascadia Code, Consolas, monospace" font-size="86" fill="#9bb3c4" fill-opacity="0.05">GPU</text>
+  <g transform="translate(360 238)">
+    <g transform="translate(0 -102)" opacity="0.55">
+      <path d="M0-40 150-12v64L0 80-150 52V-12Z" fill="url(#layer)" stroke="#7fa9ff" stroke-opacity="0.4"/>
+      <text x="0" y="26" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="10" fill="#8fa3b4">BASE MODEL / 7B</text>
+    </g>
+    <g transform="translate(0 -35)" opacity="0.75">
+      <path d="M0-40 150-12v64L0 80-150 52V-12Z" fill="url(#layer)" stroke="#7fa9ff" stroke-opacity="0.5"/>
+      <text x="0" y="26" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="10" fill="#b8c9dd">PEFT ADAPTER</text>
+    </g>
+    <g transform="translate(0 32)">
+      <path d="M0-40 150-12v64L0 80-150 52V-12Z" fill="url(#layer)" stroke="#61d7bd" stroke-opacity="0.6"/>
+      <text x="0" y="26" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="10" fill="#61d7bd">YOUR TASK</text>
+    </g>
+  </g>
+  <g font-family="Cascadia Code, Consolas, monospace" font-size="8" fill="#637586">
+    <text x="40" y="410">$ python serve.py --model qwen --adapter lora</text>
+    <text x="40" y="427" fill="#61d7bd" fill-opacity="0.75">VRAM 11.8 / 24 GB · 42 tok/s</text>
+  </g>
+  <g transform="translate(638 328)">
+    <rect x="0" y="0" width="122" height="54" rx="6" fill="#0f1d25" stroke="#7fa9ff" stroke-opacity="0.3"/>
+    <text x="61" y="19" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="7" fill="#637586">ADAPTER</text>
+    <text x="61" y="36" text-anchor="middle" font-family="Cascadia Code, Consolas, monospace" font-size="10" fill="#7fa9ff">r=16 / α=32</text>
+  </g>
+  <g fill="#61d7bd">
+    <circle cx="250" cy="112" r="2.5"/><circle cx="520" cy="96" r="2"/><circle cx="642" cy="180" r="2.5"/>
+  </g>
+</svg>

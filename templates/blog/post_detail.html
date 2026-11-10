@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block extra_head %}
+{% include "includes/content_head.html" %}
+{% endblock %}
+
+{% block chrome %}
+<div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+{% endblock %}
+
+{% block content %}
+<article class="article">
+  <header class="article-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="面包屑">
+        <a href="{% url 'blog:home' %}">首页</a>
+        <span>/</span>
+        <a href="{% url 'blog:post_list' %}">文章</a>
+        <span>/</span>
+        <a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a>
+      </nav>
+
+      <div class="article-hero-grid">
+        <div class="article-hero-copy">
+          <div class="article-kicker">
+            <a class="category-chip" href="{{ post.category.get_absolute_url }}">{{ post.category.icon }} {{ post.category.name }}</a>
+            {% if post.is_fresh %}<span class="fresh-dot">NEW</span>{% endif %}
+            <span class="article-kicker-sep"></span>
+            <span>{{ post.published_at|date:"Y.m.d" }}</span>
+          </div>
+          <h1 class="article-title">{{ post.title }}</h1>
+          <p class="article-summary">{{ post.summary }}</p>
+          <div class="article-meta">
+            <span class="meta-item"><svg class="icon" aria-hidden="true"><use href="#icon-user"></use></svg>{{ site.owner }}</span>
+            <span class="meta-item"><svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg>{{ post.reading_minutes }} 分钟</span>
+            <span class="meta-item"><svg class="icon" aria-hidden="true"><use href="#icon-eye"></use></svg>{{ post.views }} 次阅读</span>
+            <span class="meta-item"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>{{ post.updated_at|date:"Y.m.d" }} 更新</span>
+          </div>
+        </div>
+
+        <aside class="article-hero-card accent-{{ post.accent }}" aria-label="文章信息">
+          <span class="article-card-index">FIELD NOTE / {{ post.published_at|date:"Y" }}</span>
+          <div class="article-card-rule"></div>
+          <dl>
+            <div><dt>CATEGORY</dt><dd>{{ post.category.name }}</dd></div>
+            <div><dt>READING</dt><dd>{{ post.reading_minutes }} MIN</dd></div>
+            <div><dt>STATUS</dt><dd class="is-published"><span class="pulse-dot"></span>PUBLISHED</dd></div>
+          </dl>
+          <span class="article-card-glyph" aria-hidden="true">{{ post.category.icon }}</span>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <div class="container article-layout">
+    <div class="article-main">
+      <div class="prose" data-article-content>
+        {{ rendered.html|safe }}
+      </div>
+
+      <footer class="article-end">
+        <div class="article-end-top">
+          <div class="article-tags">
+            <span class="article-end-label">TAGS</span>
+            {% for tag in post.tags.all %}<a href="{{ tag.get_absolute_url }}">#{{ tag.name }}</a>{% endfor %}
+          </div>
+          <button class="copy-link" type="button" data-copy-link aria-label="复制本文链接">
+            <svg class="icon" aria-hidden="true"><use href="#icon-link"></use></svg>
+            <span>复制链接</span>
+          </button>
+        </div>
+
+        {% if post.update_log or post.errata %}
+          <div class="article-notes-grid">
+            {% if post.update_log %}
+              <section class="article-note">
+                <p class="article-note-label">UPDATE LOG / 更新日志</p>
+                <div>{{ post.update_log|linebreaks }}</div>
+              </section>
+            {% endif %}
+            {% if post.errata %}
+              <section class="article-note article-note--warn">
+                <p class="article-note-label">ERRATA / 勘误与讨论</p>
+                <div>{{ post.errata|linebreaks }}</div>
+              </section>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="article-license">
+          <span class="license-mark">CC</span>
+          <p>本文以 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> 许可分享。转载请注明作者与出处；代码示例可自由使用。</p>
+        </div>
+      </footer>
+
+      <nav class="post-nav" aria-label="上一篇与下一篇">
+        {% if previous_post %}
+          <a class="post-nav-item" href="{{ previous_post.get_absolute_url }}">
+            <span class="post-nav-label"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>上一篇</span>
+            <strong>{{ previous_post.title }}</strong>
+            <span>{{ previous_post.published_at|date:"Y.m.d" }}</span>
+          </a>
+        {% else %}
+          <span class="post-nav-item is-empty"><span class="post-nav-label">上一篇</span><strong>已经是最早一篇</strong></span>
+        {% endif %}
+        {% if next_post %}
+          <a class="post-nav-item post-nav-item--next" href="{{ next_post.get_absolute_url }}">
+            <span class="post-nav-label">下一篇<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></span>
+            <strong>{{ next_post.title }}</strong>
+            <span>{{ next_post.published_at|date:"Y.m.d" }}</span>
+          </a>
+        {% else %}
+          <span class="post-nav-item post-nav-item--next is-empty"><span class="post-nav-label">下一篇</span><strong>已经是最新一篇</strong></span>
+        {% endif %}
+      </nav>
+
+      {% if related_posts %}
+      <section class="related-posts">
+        <div class="section-head section-head--small">
+          <div class="section-head-copy">
+            <p class="eyebrow">KEEP READING</p>
+            <h2>相关文章</h2>
+          </div>
+        </div>
+        <div class="related-list">
+          {% for related in related_posts %}
+            <a class="related-item accent-{{ related.accent }}" href="{{ related.get_absolute_url }}">
+              <span class="related-cat">{{ related.category.name }}</span>
+              <strong>{{ related.title }}</strong>
+              <span class="related-meta">{{ related.published_at|date:"Y.m.d" }} · {{ related.reading_minutes }} min</span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="comments" id="comments">
+        <div class="section-head section-head--small">
+          <div class="section-head-copy">
+            <p class="eyebrow">DISCUSSION</p>
+            <h2>评论与讨论</h2>
+          </div>
+          <span class="comments-service">GISCUS</span>
+        </div>
+        {% if giscus_enabled %}
+          <div class="giscus-wrap">
+            <script src="https://giscus.app/client.js"
+              data-repo="{{ giscus.repo }}"
+              data-repo-id="{{ giscus.repo_id }}"
+              data-category="{{ giscus.category }}"
+              data-category-id="{{ giscus.category_id }}"
+              data-mapping="{{ giscus.mapping }}"
+              data-strict="{{ giscus.strict }}"
+              data-reactions-enabled="{{ giscus.reactions_enabled }}"
+              data-emit-metadata="{{ giscus.emit_metadata }}"
+              data-input-position="{{ giscus.input_position }}"
+              data-theme="dark_dimmed"
+              data-lang="{{ giscus.lang }}"
+              crossorigin="anonymous"
+              async>
+            </script>
+          </div>
+        {% else %}
+          <div class="comments-placeholder">
+            <span class="comments-mark">“</span>
+            <div>
+              <p>评论区还在施工。若你对这篇文章有疑问或勘误，欢迎直接写信。</p>
+              <a class="text-link" href="mailto:{{ site.email }}?subject=关于《{{ post.title }}》">写信讨论 <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <aside class="article-aside" aria-label="文章侧栏">
+      {% include "partials/toc.html" with toc=toc %}
+
+      <div class="aside-block article-author">
+        <p class="aside-label">WRITTEN BY</p>
+        <div class="aside-author-row">
+          <img src="{% static site.avatar %}" alt="" width="48" height="48">
+          <div><strong>{{ site.owner }}</strong><span>{{ site.role }}</span></div>
+        </div>
+        <p>{{ site.description }}</p>
+        <a href="{% url 'blog:about' %}" class="text-link">关于我 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="aside-block">
+        <p class="aside-label">FILED UNDER</p>
+        <a class="aside-category" href="{{ post.category.get_absolute_url }}"><span>{{ post.category.icon }}</span>{{ post.category.name }}</a>
+        <div class="aside-tags">
+          {% for tag in post.tags.all %}<a href="{{ tag.get_absolute_url }}">#{{ tag.name }}</a>{% endfor %}
+        </div>
+      </div>
+
+      <div class="aside-block aside-meta">
+        <p class="aside-label">DETAILS</p>
+        <dl>
+          <div><dt>发布</dt><dd>{{ post.published_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>更新</dt><dd>{{ post.updated_at|date:"Y.m.d" }}</dd></div>
+          <div><dt>字数</dt><dd>{{ post.content|length }} chars</dd></div>
+          <div><dt>许可</dt><dd>CC BY-NC-SA</dd></div>
+        </dl>
+      </div>
+
+      <button class="aside-top" type="button" data-back-to-top>
+        <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up"></use></svg>
+        回到顶部
+      </button>
+    </aside>
+  </div>
+</article>
+{% endblock %}
+
+{% block scripts %}
+{% include "includes/content_scripts.html" %}
+{% endblock %}
